@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Binary files
+bin/
+/scraper
+/codegen
+/scpcli
+
+# Local agent config
+.claude/settings.local.json
+
+# Env vars and secrets
+.env
+
+docs/

@@ -1,0 +1,48 @@
+[tools]
+go = "1.25.2"
+hk = "latest"
+pkl = "latest"
+golangci-lint = "latest"
+
+[env]
+_.file = ".env"
+HK_MISE = 1
+
+[hooks]
+# Automatically install/update hooks when tools are installed
+postinstall = "hk install --mise"
+
+[tasks.pre-commit]
+run = "hk run pre-commit"
+
+[tasks.build]
+description = "Build the scpcli binary to ./bin/scpcli"
+run = "go build -o bin/scpcli ./cmd/scpcli"
+
+[tasks.build-release]
+description = "Build the scpcli binary to ./bin/scpcli"
+run = "go build -ldflags='-s -w' -o bin/scpcli ./cmd/scpcli "
+
+[tasks.lint]
+description = "Run golangci-lint across all packages"
+run = "golangci-lint run ./..."
+
+[tasks.test]
+description = "Run all tests"
+run = "go test ./..."
+
+[tasks.scrape]
+description = "Fetch API docs from SCP portal and regenerate openapi.yaml (requires SCP session env vars)"
+run = "go run ./tools/scraper"
+
+[tasks.codegen]
+description = "Regenerate internal/commands/*_gen.go from openapi.yaml"
+run = "go run ./tools/codegen"
+
+[tasks.generate]
+description = "Full pipeline: scrape then codegen (requires SCP session env vars)"
+run = ["go run ./tools/scraper", "go run ./tools/codegen"]
+
+[tasks.tidy]
+description = "Tidy and verify go.mod / go.sum"
+run = "go mod tidy"
